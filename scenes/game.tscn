@@ -1,0 +1,125 @@
+[gd_scene load_steps=8 format=3 uid="uid://c2p0sdx7f1xn3"]
+
+[ext_resource type="PackedScene" uid="uid://blki286nmq8s4" path="res://scenes/wall.tscn" id="1_mslua"]
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_r68nv"]
+[ext_resource type="PackedScene" uid="uid://hasi1xrrnt0a" path="res://scenes/player.tscn" id="2_0lste"]
+[ext_resource type="Theme" uid="uid://dwx1hpxulw8kf" path="res://assets/font/text.tres" id="2_aclda"]
+[ext_resource type="Script" path="res://scripts/bricks.gd" id="5_t0s73"]
+[ext_resource type="AudioStream" uid="uid://d1jlinl8gi8fd" path="res://assets/sounds/676810__cogfirestudios__ardace-death-lose-sfx.wav" id="6_t283j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4jqsi"]
+size = Vector2(800, 5)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_r68nv")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 800.0
+offset_bottom = 600.0
+color = Color(0, 0, 0, 1)
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Score" type="Label" parent="UI"]
+layout_mode = 2
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 205.0
+offset_bottom = 105.0
+theme = ExtResource("2_aclda")
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HighScore" type="Label" parent="UI"]
+layout_mode = 2
+offset_left = 207.0
+offset_top = 6.0
+offset_right = 407.0
+offset_bottom = 106.0
+theme = ExtResource("2_aclda")
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Life" type="Label" parent="UI"]
+layout_mode = 2
+offset_left = 595.0
+offset_top = 5.0
+offset_right = 795.0
+offset_bottom = 105.0
+theme = ExtResource("2_aclda")
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Edges" type="Node2D" parent="."]
+
+[node name="Wall" parent="Edges" instance=ExtResource("1_mslua")]
+
+[node name="Wall2" parent="Edges" instance=ExtResource("1_mslua")]
+position = Vector2(795, 0)
+
+[node name="Roof" type="StaticBody2D" parent="Edges"]
+
+[node name="ColorRect" type="ColorRect" parent="Edges/Roof"]
+offset_right = 800.0
+offset_bottom = 5.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Edges/Roof"]
+position = Vector2(400, 2.5)
+shape = SubResource("RectangleShape2D_4jqsi")
+
+[node name="Player" parent="." instance=ExtResource("2_0lste")]
+position = Vector2(339, 503)
+
+[node name="Bricks" type="Node2D" parent="."]
+script = ExtResource("5_t0s73")
+
+[node name="GameOverUI" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 800.0
+offset_bottom = 600.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -80.0
+offset_right = 360.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+
+[node name="GameOver" type="Label" parent="GameOverUI/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_aclda")
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 80
+text = "Game Over
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="Restart" type="Label" parent="GameOverUI/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_aclda")
+theme_override_constants/outline_size = 20
+text = "Press R to Restart"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameOver" type="AudioStreamPlayer2D" parent="GameOverUI"]
+stream = ExtResource("6_t283j")
